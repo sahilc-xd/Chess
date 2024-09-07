@@ -50,7 +50,7 @@ export class GameManager
                 if (game)
                 {   
                      console.log("make move function is called on add handler ");
-                    game.makeMove(socket,message.move);
+                    game.makeMove(socket,message.payload.move);
                 }
             }
         })

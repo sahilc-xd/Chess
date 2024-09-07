@@ -12,7 +12,7 @@ export const Game = () => {
     const socket = useSocket();
     const [chess,setChess] = useState(new Chess());
     const [board,setBoard] = useState(chess.board());
-
+    const [started, setStarted] = useState(false);
     useEffect(() => { 
         if (!socket)
         {
@@ -22,10 +22,9 @@ export const Game = () => {
             const message = JSON.parse(event.data);
             switch (message.type)
             {
-                case INIT_GAME:
-                    setChess(new Chess());
+                case INIT_GAME:      
                     setBoard(chess.board());
-                    console.log("game initialized");
+                    setStarted(true);
                     break;
                 case MOVE:
                     const move = message.payload;
@@ -41,18 +40,18 @@ export const Game = () => {
     }, [socket]);
     if(!socket)return <div>connecting ...</div>
     return <>
-        <div className="justify-center flex">
+        <div className="justify-center flex ">
             <div className="pt-8 max-w-screen-lg">
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <div>
-                        <ChessBoard board={board}></ChessBoard>
+                <div className="grid grid-cols-6 gap-4 w-full">
+                    <div className="col-span-4 w-full flex justify-center">
+                        <ChessBoard chess={chess} setBoard={setBoard} socket={socket} board={board}></ChessBoard>
                     </div>
-                    <div>
-                         <Button onClick={() => {
+                    <div className="col-span-2 bg-slate-800 w-full flex justify-center pt-20">
+                         {!started && <Button onClick={() => {
                             socket.send(JSON.stringify({
                                 type:INIT_GAME
                             }))
-                            }}>Play Online</Button>
+                            }}>Play Online</Button>}
                     </div>
                 </div>
             </div>

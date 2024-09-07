@@ -36,7 +36,7 @@ class GameManager {
                 const game = this.games.find(game => game.player1 === socket || game.player2 === socket);
                 if (game) {
                     console.log("make move function is called on add handler ");
-                    game.makeMove(socket, message.move);
+                    game.makeMove(socket, message.payload.move);
                 }
             }
         });
